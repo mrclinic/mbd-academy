@@ -1,0 +1,178 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Role {
+  id    Int     @id @default(autoincrement())
+  name  String  @unique
+  users User[]
+}
+
+model User {
+  id           String     @id @default(uuid())
+  email        String     @unique
+  passwordHash String
+  displayName  String?
+  roleId       Int?
+  role         Role?      @relation(fields: [roleId], references: [id])
+  trainer      Trainer?
+  feedbacks    Feedback[]
+  enrollments  Enrollment[]
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+model Category {
+  id              Int       @id @default(autoincrement())
+  nameEn          String
+  nameAr          String
+  descriptionEn   String?
+  descriptionAr   String?
+  tags            String[]  @default([])
+  courses         Course[]
+  articles        Article[]
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model Level {
+  id              Int       @id @default(autoincrement())
+  nameEn          String
+  nameAr          String
+  descriptionEn   String?
+  descriptionAr   String?
+  courses         Course[]
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model Speciality {
+  id              Int       @id @default(autoincrement())
+  nameEn          String
+  nameAr          String
+  descriptionEn   String?
+  descriptionAr   String?
+  trainers        Trainer[]
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model Trainer {
+  id              String       @id @default(uuid())
+  user            User?        @relation(fields: [userId], references: [id])
+  userId          String?      @unique
+  nameEn          String
+  nameAr          String
+  bioEn           String?
+  bioAr           String?
+  imageUrl        String?
+  courses         Course[]
+  articles        Article[]
+  specialityId    Int?
+  active          Boolean     @default(true)
+  speciality      Speciality?  @relation(fields: [specialityId], references: [id])
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+}
+
+model Course {
+  id              String      @id @default(uuid())
+  nameEn          String
+  nameAr          String
+  descriptionEn   String?
+  descriptionAr   String?
+  categoryId      Int?
+  category        Category?   @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  trainerId       String?
+  trainer         Trainer?    @relation(fields: [trainerId], references: [id], onDelete: SetNull)
+  levelId         Int?
+  level           Level?      @relation(fields: [levelId], references: [id], onDelete: SetNull)
+  published       Boolean     @default(false)
+  price           Float       @default(0)
+  url             String?
+  syllabusEn      String[]    @default([])
+  syllabusAr      String[]    @default([])
+  feedbacks       Feedback[]
+  enrollments     Enrollment[]
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+model Feedback {
+  id              Int      @id @default(autoincrement())
+  course          Course   @relation(fields: [courseId], references: [id])
+  courseId        String
+  rating          Int
+  commentEn       String?
+  commentAr       String?
+  email           String?
+  userId          String?
+  user            User?     @relation(fields: [userId], references: [id])
+  createdAt       DateTime  @default(now())
+}
+
+model Article {
+  id              String      @id @default(uuid())
+  nameEn          String
+  nameAr          String
+  descriptionEn   String?
+  descriptionAr   String?
+  contentEn       String?
+  contentAr       String?
+  categoryId      Int?
+  category        Category?   @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  trainerId       String?
+  trainer         Trainer?    @relation(fields: [trainerId], references: [id], onDelete: SetNull)
+  published       Boolean     @default(false)
+  publishDate     DateTime    @default(now())
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+model Enrollment {
+  id              String   @id @default(uuid())
+  user            User     @relation(fields: [userId], references: [id])
+  userId          String
+  course          Course   @relation(fields: [courseId], references: [id])
+  courseId        String
+  enrolledAt      DateTime @default(now())
+  status          String   @default("active")
+}
+
+model ContactMessage {
+  id              Int      @id @default(autoincrement())
+  nameEn          String
+  nameAr          String
+  email           String
+  subjectEn       String?
+  subjectAr       String?
+  messageEn       String
+  messageAr       String
+  read            Boolean     @default(false)
+  createdAt       DateTime @default(now())
+}
+
+model SocialLink {
+  id              Int      @id @default(autoincrement())
+  platformEn      String
+  platformAr      String
+  url             String
+  createdAt       DateTime @default(now())
+}
+
+model PricingPlan {
+  id              Int       @id @default(autoincrement())
+  nameEn          String
+  nameAr          String
+  price           Float     @default(0)
+  active          Boolean     @default(true)
+  featuresEn      String[]  @default([])
+  featuresAr      String[]  @default([])
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
