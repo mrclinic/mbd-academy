@@ -13,6 +13,7 @@ import { FeedbackModule } from './modules/feedback/feedback.module';
 import { LevelsModule } from './modules/levels/levels.module';
 import { TrainersModule } from './modules/trainers/trainers.module';
 import { UsersModule } from './modules/users/users.module';
+import { SpecialitiesModule } from './modules/specialities/specialities.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { UsersModule } from './modules/users/users.module';
     LevelsModule,
     PricingModule,
     ContactModule,
+    SpecialitiesModule
   ],
 })
 export class AppModule { }
