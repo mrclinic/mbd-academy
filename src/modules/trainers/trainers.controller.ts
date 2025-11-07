@@ -4,6 +4,7 @@ import {
   Post,
   Patch,
   Delete,
+  Put,
   Body,
   Req,
   UseGuards,
@@ -19,7 +20,7 @@ import { Roles } from '../auth/roles.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
-import { CreateTrainerDto } from '../dto/trainer.dto';
+import { CreateTrainerDto, UpdateTrainerDto } from '../dto/trainer.dto';
 import { ApiTags, ApiConsumes, ApiBody, ApiBearerAuth, ApiOperation, ApiResponse, ApiQuery, ApiParam } from '@nestjs/swagger';
 import * as Joi from 'joi';
 import { JoiSchema } from '../../validation/joi-schema.decorator';
@@ -27,6 +28,14 @@ import { Reflector } from '@nestjs/core';
 import { validateRouteBody } from '../../validation/validate.helper';
 
 const createSchema = Joi.object({
+  nameEn: Joi.string().required(),
+  nameAr: Joi.string().required(),
+  bioEn: Joi.string().optional().allow(null, ''),
+  bioAr: Joi.string().optional().allow(null, ''),
+  specialityId: Joi.number().optional().allow(null),
+  userId: Joi.string().uuid().optional().allow(null),
+});
+const updateSchema = Joi.object({
   nameEn: Joi.string().required(),
   nameAr: Joi.string().required(),
   bioEn: Joi.string().optional().allow(null, ''),
@@ -76,7 +85,7 @@ export class TrainersController {
   // POST /trainers
   // ---------------------------
   @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Roles('admin', 'trainer')
+  @Roles('admin')
   @Post()
   @JoiSchema(createSchema)
   @ApiOperation({ summary: 'Create a new trainer' })
@@ -148,5 +157,41 @@ export class TrainersController {
   @ApiResponse({ status: 200, description: 'Trainer active status toggled', schema: { example: { id: 'abc123', active: false, message: 'Trainer active status updated successfully' } } })
   async toggleActive(@Param('id') id: string) {
     return this.service.toggleActive(id);
+  }
+
+  // ---------------------------
+  // PUT /trainers/:id
+  // ---------------------------
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles('admin')
+  @Put(':id')
+  @JoiSchema(updateSchema)
+  @ApiOperation({ summary: 'Update an existing trainer' })
+  @ApiParam({ name: 'id', description: 'Trainer ID' })
+  @ApiBearerAuth()
+  @ApiResponse({
+    status: 200,
+    description: 'Trainer updated successfully',
+    schema: {
+      example: {
+        message: 'Trainer updated successfully',
+        data: {
+          id: 1,
+          nameEn: 'Updated nameEn',
+          nameAr: 'Updated nameAr',
+          bioEn: 'Updated bioEn',
+          bioAr: 'Updated bioAr',
+          specialityId: 1,
+        },
+      },
+    },
+  })
+  async update(@Param('id') id: string, @Body() body: UpdateTrainerDto) {
+    const validated = validateRouteBody(
+      this.reflector,
+      (this as any).update,
+      body,
+    );
+    return this.service.update(id, validated);
   }
 }
