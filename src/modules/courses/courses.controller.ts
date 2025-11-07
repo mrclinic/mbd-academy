@@ -44,7 +44,7 @@ export class CoursesController {
 
   @Patch(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('Admin', 'Trainer')
+  @Roles('admin', 'trainer')
   @ApiParam({ name: 'id', description: 'Course ID' })
   @ApiOperation({ summary: 'Update a course' })
   @ApiBearerAuth()
@@ -54,7 +54,7 @@ export class CoursesController {
 
   @Delete(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('Admin', 'Trainer')
+  @Roles('admin', 'trainer')
   @ApiParam({ name: 'id', description: 'Course ID' })
   @ApiOperation({ summary: 'Delete a course' })
   @ApiBearerAuth()
