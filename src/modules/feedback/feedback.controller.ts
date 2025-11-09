@@ -9,6 +9,7 @@ import {
   Req,
   Delete,
   Patch,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { FeedbackService } from './feedback.service';
 import { JoiSchema } from '../../validation/joi-schema.decorator';
@@ -31,14 +32,19 @@ import {
 const createSchema = Joi.object({
   courseId: Joi.string().uuid().required(),
   rating: Joi.number().min(1).max(5).required(),
-  comment: Joi.string().optional().allow(null, ''),
+  commentEn: Joi.string().optional().allow(null, ''),
+  commentAr: Joi.string().optional().allow(null, ''),
   email: Joi.string().email().optional().allow(null, ''),
   userId: Joi.string().uuid().optional().allow(null),
 });
 
 const updateSchema = Joi.object({
-  rating: Joi.number().min(1).max(5).optional(),
-  comment: Joi.string().optional().allow(null, ''),
+  courseId: Joi.string().uuid().required(),
+  rating: Joi.number().min(1).max(5).required(),
+  commentEn: Joi.string().optional().allow(null, ''),
+  commentAr: Joi.string().optional().allow(null, ''),
+  email: Joi.string().email().optional().allow(null, ''),
+  userId: Joi.string().uuid().optional().allow(null),
 });
 
 @ApiTags('Feedback')
@@ -159,7 +165,7 @@ export class FeedbackController {
       },
     },
   })
-  async update(@Param('id') id: number, @Body() body: UpdateFeedbackDto) {
+  async update(@Param('id', ParseIntPipe) id: number, @Body() body: UpdateFeedbackDto) {
     const validated = validateRouteBody(
       this.reflector,
       (this as any).update,
@@ -182,7 +188,7 @@ export class FeedbackController {
     description: 'Feedback deleted successfully',
     schema: { example: { message: 'Feedback deleted successfully', id: '123e4567-e89b-12d3-a456-426614174000' } },
   })
-  async remove(@Param('id') id: number) {
+  async remove(@Param('id', ParseIntPipe) id: number) {
     return this.service.remove(id);
   }
 
