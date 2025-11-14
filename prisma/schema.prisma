@@ -111,6 +111,7 @@ model Feedback {
   commentEn       String?
   commentAr       String?
   email           String?
+  fullName            String?
   userId          String?
   user            User?     @relation(fields: [userId], references: [id])
   createdAt       DateTime  @default(now())
@@ -175,4 +176,14 @@ model PricingPlan {
   featuresAr      String[]  @default([])
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
+}
+
+model FrequentQuestion {
+  id        Int      @id @default(autoincrement())
+  titleEn   String
+  titleAr   String
+  answerEn  String
+  answerAr  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

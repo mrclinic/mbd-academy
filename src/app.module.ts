@@ -14,6 +14,7 @@ import { LevelsModule } from './modules/levels/levels.module';
 import { TrainersModule } from './modules/trainers/trainers.module';
 import { UsersModule } from './modules/users/users.module';
 import { SpecialitiesModule } from './modules/specialities/specialities.module';
+import { FrequentQuestionsModule } from './modules/frequent-questions/frequent-questions.module';
 
 @Module({
   imports: [
@@ -30,7 +31,8 @@ import { SpecialitiesModule } from './modules/specialities/specialities.module';
     LevelsModule,
     PricingModule,
     ContactModule,
-    SpecialitiesModule
+    SpecialitiesModule,
+    FrequentQuestionsModule
   ],
 })
 export class AppModule { }
