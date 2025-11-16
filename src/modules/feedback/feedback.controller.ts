@@ -63,6 +63,7 @@ export class FeedbackController {
   @Post()
   @JoiSchema(createSchema)
   @ApiOperation({ summary: 'Create feedback for a course' })
+  @ApiBearerAuth()
   @ApiResponse({
     status: 201,
     description: 'Feedback created successfully',
