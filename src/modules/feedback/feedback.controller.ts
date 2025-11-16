@@ -6,7 +6,6 @@ import {
   Param,
   Query,
   UseGuards,
-  Req,
   Delete,
   Patch,
   ParseIntPipe,
@@ -16,7 +15,6 @@ import { JoiSchema } from '../../validation/joi-schema.decorator';
 import * as Joi from 'joi';
 import { validateRouteBody } from '../../validation/validate.helper';
 import { Reflector } from '@nestjs/core';
-import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../auth/roles.decorator';
 import { CreateFeedbackDto, UpdateFeedbackDto } from '../dto/feedback.dto';
@@ -28,6 +26,7 @@ import {
   ApiParam,
   ApiBearerAuth,
 } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 const createSchema = Joi.object({
   courseId: Joi.string().uuid().required(),
@@ -60,7 +59,7 @@ export class FeedbackController {
   // ---------------------------
   // POST /feedback
   // ---------------------------
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   @Post()
   @JoiSchema(createSchema)
   @ApiOperation({ summary: 'Create feedback for a course' })
@@ -152,7 +151,7 @@ export class FeedbackController {
   // ---------------------------
   // PATCH /feedback/:id
   // ---------------------------
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin', 'user')
   @Patch(':id')
   @JoiSchema(updateSchema)
@@ -183,7 +182,7 @@ export class FeedbackController {
   // ---------------------------
   // DELETE /feedback/:id
   // ---------------------------
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
   @Delete(':id')
   @ApiOperation({ summary: 'Delete feedback' })
