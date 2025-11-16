@@ -36,7 +36,7 @@ const createSchema = Joi.object({
   commentAr: Joi.string().optional().allow(null, ''),
   email: Joi.string().email().optional().allow(null, ''),
   userId: Joi.string().uuid().optional().allow(null),
-  displayName: Joi.string().optional().allow(null, '')
+  fullName: Joi.string().optional().allow(null, '')
 });
 
 const updateSchema = Joi.object({
@@ -46,7 +46,7 @@ const updateSchema = Joi.object({
   commentAr: Joi.string().optional().allow(null, ''),
   email: Joi.string().email().optional().allow(null, ''),
   userId: Joi.string().uuid().optional().allow(null),
-  displayName: Joi.string().optional().allow(null, '')
+  fullName: Joi.string().optional().allow(null, '')
 });
 
 @ApiTags('Feedback')
@@ -76,7 +76,7 @@ export class FeedbackController {
         email: 'user@example.com',
         userId: 'user-uuid',
         createdAt: '2025-10-11T10:00:00Z',
-        displayName: 'Great course!',
+        fullName: 'Great course!',
       },
     },
   })
@@ -113,7 +113,7 @@ export class FeedbackController {
             email: 'user@example.com',
             userId: 'user-uuid',
             createdAt: '2025-10-11T10:00:00Z',
-            displayName: 'Great course!',
+            fullName: 'Great course!',
           },
         ],
       },
@@ -141,7 +141,7 @@ export class FeedbackController {
         email: 'user@example.com',
         userId: 'user-uuid',
         createdAt: '2025-10-11T10:00:00Z',
-        displayName: 'Great course!',
+        fullName: 'Great course!',
       },
     },
   })
@@ -167,7 +167,7 @@ export class FeedbackController {
         id: '123e4567-e89b-12d3-a456-426614174000',
         rating: 4,
         comment: 'Updated comment',
-        displayName: 'Great course!',
+        fullName: 'Great course!',
       },
     },
   })
@@ -222,7 +222,7 @@ export class FeedbackController {
             comment: 'Excellent course!',
             email: 'user@example.com',
             createdAt: '2025-10-11T10:00:00Z',
-            displayName: 'Great course!',
+            fullName: 'Great course!',
           },
           {
             id: '223e4567-e89b-12d3-a456-426614174000',
@@ -231,7 +231,7 @@ export class FeedbackController {
             comment: 'Very informative',
             email: 'user@example.com',
             createdAt: '2025-10-11T11:00:00Z',
-            displayName: 'Great course!',
+            fullName: 'Great course!',
           },
         ],
       },

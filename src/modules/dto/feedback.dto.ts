@@ -8,7 +8,7 @@ export class CreateFeedbackDto {
   @ApiProperty({ required: false }) @IsOptional() @IsString() commentAr?: string;
   @ApiProperty({ required: false }) @IsOptional() @IsUUID() userId?: string;
   @ApiProperty({ required: false }) @IsOptional() @IsString() email?: string;
-  @ApiProperty({ required: false }) @IsOptional() @IsString() displayName?: string;
+  @ApiProperty({ required: false }) @IsOptional() @IsString() fullName?: string;
 
 }
 
